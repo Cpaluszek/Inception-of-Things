@@ -2,11 +2,13 @@ Vagrant.configure("2") do |config|
 	# Latest stable debian version: 12 Bookworm
 	config.vm.box = "debian/bookworm64"
 
-	# TODO: set network settings
+	# network settings
+	config.vm.network "private_network", ip: "192.168.56.110"
 
-	# TODO: set hostname
+	# hostname
+	config.vm.hostname = "cpaluszeS"
 
-	# set machine resources
+	# machine resources
 	config.vm.provider "virtualbox" do |vb|
 		vb.memory = "1024"
 		vb.cpus = 1
