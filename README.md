@@ -11,3 +11,4 @@ Debian 12 Bookworm box: [Vagrant box debian/bookworm64 - Vagrant Cloud](https://
 
 ## References
 - [Quick Start | Vagrant | HashiCorp Developer](https://developer.hashicorp.com/vagrant/tutorials/getting-started)
+- [Quick-Start Guide | K3s](https://docs.k3s.io/quick-start)
