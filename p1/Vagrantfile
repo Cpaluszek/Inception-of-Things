@@ -1,4 +1,4 @@
-IMAGE = "generic/alpine319"
+IMAGE = "debian/bookworm64"
 MEMORY = "1024"
 CPUS = 1
 
