@@ -32,8 +32,9 @@ echo -e "${GREEN}K3s is running${RESET}"
 # Add entries to /etc/hosts
 echo "192.168.56.110 app1.com" | sudo tee -a /etc/hosts
 echo "192.168.56.110 app2.com" | sudo tee -a /etc/hosts
-# app3 will be selected by default
+echo "192.168.56.110 app3.com" | sudo tee -a /etc/hosts
 
-kubectl apply -f /vagrant/manifests/service.yaml
-kubectl apply -f /vagrant/manifests/app1.yaml
-kubectl apply -f /vagrant/manifests/ingress.yaml
+# Apply the manifests
+kubectl apply -f /vagrant/manifests/service.yml
+kubectl apply -f /vagrant/manifests/apps.yml
+kubectl apply -f /vagrant/manifests/ingress.yml
