@@ -34,8 +34,3 @@ spec:
             name: app3
             port:
               number: 80
-  defaultBackend:
-      service:
-        name: app3
-        port:
-          number: 80
