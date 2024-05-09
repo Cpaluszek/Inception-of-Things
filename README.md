@@ -36,6 +36,11 @@ kubectl lgos <pod-name>
 kubectl describe deployment/pod/service/ingress <name>
 ```
 
+## Part 3: k3d and ArgoCD
+- [k3d](https://k3d.io/v5.6.3/)
+- [Argo CD - Declarative GitOps CD for Kubernetes](https://argo-cd.readthedocs.io/en/stable/)
+
+
 ## References
 - [Quick Start | Vagrant | HashiCorp Developer](https://developer.hashicorp.com/vagrant/tutorials/getting-started)
 - [Quick-Start Guide | K3s](https://docs.k3s.io/quick-start)
