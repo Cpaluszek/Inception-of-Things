@@ -40,6 +40,13 @@ kubectl describe deployment/pod/service/ingress <name>
 - [k3d](https://k3d.io/v5.6.3/)
 - [Argo CD - Declarative GitOps CD for Kubernetes](https://argo-cd.readthedocs.io/en/stable/)
 
+Two namespaces:
+- `argocd`
+- `dev` - automatically deployed using argocd and a github repo
+
+The port-forwarding needs to be upadted once the app has been refreshed.
+- TODO: Maybe use ingress app to automate network access
+
 
 ## References
 - [Quick Start | Vagrant | HashiCorp Developer](https://developer.hashicorp.com/vagrant/tutorials/getting-started)

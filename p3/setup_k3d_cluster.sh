@@ -20,6 +20,7 @@ create_cluster() {
 }
 
 setup_argo() {
+    # TODO: add if argocd is not installed
     echo -e "${GREEN} Installing argocd...${RESET}"
     kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
@@ -41,10 +42,27 @@ setup_argo() {
 
 create_argocd_app() {
     echo -e "${GREEN} Creating argocd application...${RESET}"
+    # [`argocd app create` Command Reference - Argo CD - Declarative GitOps CD for Kubernetes](https://argo-cd.readthedocs.io/en/stable/user-guide/commands/argocd_app_create/)
+    argocd app create will --repo https://github.com/Cpaluszek/cpalusze.git --path app --dest-server https://kubernetes.default.svc --dest-namespace dev --upsert
 
+    argocd app get will
+
+    argocd app set will --sync-policy automated --auto-prune --allow-empty
+
+    kubectl port-forward svc/will-app -n dev 8888:8888 &>/dev/null &
+    sudo netstat -tulpn | grep :8888
+}
+
+print_infos() {
+    argocd app get will
+
+    kubctl get pods -n dev
+
+    kubctl describe pod will -n dev
 }
 
 create_cluster
 setup_argo
 create_argocd_app
+print_infos
 
