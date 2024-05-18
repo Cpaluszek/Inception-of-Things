@@ -31,7 +31,7 @@ kubectl get pods
 kubectl get services
 kubectl get ingress
 
-kubectl lgos <pod-name>
+kubectl logs <pod-name>
 
 kubectl describe deployment/pod/service/ingress <name>
 ```
