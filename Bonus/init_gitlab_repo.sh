@@ -17,14 +17,20 @@ curl --header "Private-Token: $GITLAB_PSW" -X POST "$GITLAB_URL/api/v4/projects"
     --form "visibility=public"
 
 # Clone the newly created GitLab repository
+echo -e "${GREEN}Cloning the GitLab repository...${RESET}"
 git clone "http://$GITLAB_ROOT_USER:$GITLAB_PSW@$GITLAB_URL/$GITLAB_NAMESPACE/$GITLAB_REPO_NAME.git" $LOCAL_REPO_DIR
 
 # Clone the GitHub repository
+echo -e "${GREEN}Cloning the GitHub repository...${RESET}"
 git clone "https://github.com/Cpaluszek/$GITHUB_REPO_NAME.git"
 
 # Move the contents from the GitHub repository to the GitLab repository
+echo -e "${GREEN}Moving the contents from the GitHub repository to the GitLab repository...${RESET}"
 mv ${GITHUB_REPO_NAME}/* ${LOCAL_REPO_DIR}/
-mv ${GITHUB_REPO_NAME}/.gitignore ${LOCAL_REPO_DIR}/  # Ensure hidden files are moved too
+rm -rf ${GITHUB_REPO_NAME}
+
+echo -e "${GREEN}Directory contents:${RESET}"
+ls -la ${LOCAL_REPO_DIR}
 
 # Navigate to the local GitLab repository directory
 cd ${LOCAL_REPO_DIR}

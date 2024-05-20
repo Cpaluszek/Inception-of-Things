@@ -4,14 +4,10 @@ RESET=\033[0m
 .PHONY: all infos forward curl clean
 
 all: 
-	@bash install_dependencies.sh
-	@echo "$(GREEN)Dependencies installed successfully.$(RESET)"
 	@bash setup_gitlab.sh
-	@echo "$(GREEN)Gitlab setup successfully.$(RESET)"
+	@echo "$(GREEN)k3d cluster setup successfully.$(RESET)"
 	@bash init_gitlab_repo.sh
 	@echo "$(GREEN)Gitlab repo created successfully.$(RESET)"
-	@bash setup_k3d_cluster.sh
-	@echo "$(GREEN)k3d cluster setup successfully.$(RESET)"
 
 infos:
 	@echo "$(GREEN)Fetching Kubernetes information...$(RESET)"
@@ -40,4 +36,6 @@ clean:
 	@kubectl delete namespaces argocd --ignore-not-found
 	@kubectl delete namespaces gitlab --ignore-not-found
 	@k3d cluster delete ci-cluster
+	docker stop $(docker ps -q)
+	docker system prune -a --volumes -f
 	@echo "$(GREEN)Clean up completed successfully.$(RESET)"
