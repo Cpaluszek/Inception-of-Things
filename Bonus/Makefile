@@ -1,7 +1,7 @@
 GREEN=\033[32m
 RESET=\033[0m
 
-.PHONY: install-dependencies setup-cluster
+.PHONY: install-dependencies setup-cluster setup_gitlab init_gitlab_repo
 
 all: install-dependencies setup_gitlab setup-cluster
 
