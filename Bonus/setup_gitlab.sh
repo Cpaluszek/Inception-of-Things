@@ -5,8 +5,10 @@ GREEN="\033[32m"
 RESET="\033[0m"
 
 # Install Helm
-echo -e "${GREEN}Installing Helm...${RESET}"
-sudo snap install helm --classic
+if ! command -v helm &> /dev/null; then
+    echo -e "${GREEN}Installing Helm...${RESET}"
+    sudo snap install helm --classic
+fi
 
 # Add host entry
 HOST_ENTRY="127.0.0.1 k3d.gitlab.com"
@@ -17,17 +19,25 @@ if ! grep -q "$HOST_ENTRY" "$HOSTS_FILE"; then
     echo "$HOST_ENTRY" | sudo tee -a "$HOSTS_FILE"
 fi
 
-# Create GitLab namespace
-kubectl create namespace gitlab
+CLUSTER_NAME="ci-cluster"
+if ! k3d cluster list | grep -q "${CLUSTER_NAME}"; then
+    sudo k3d cluster create ${CLUSTER_NAME}
+fi
+
+if ! kubectl get namespace gitlab > /dev/null 2>&1; then
+  sudo kubectl create namespace gitlab
+fi
 
 # Deploy GitLab using Helm
 echo -e "${GREEN}Deploying GitLab using Helm...${RESET}"
-helm repo add gitlab https://charts.gitlab.io/
-helm repo update
+sudo helm repo add gitlab https://charts.gitlab.io/
+sudo helm repo update
 
-helm upgrade --install gitlab gitlab/gitlab \
+# [GitLab Helm Charts](https://charts.gitlab.io/)
+# minikube runs a single-node Kubernetes cluster
+sudo helm upgrade --install gitlab gitlab/gitlab \
+    -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml \
     -n gitlab \
-    --version 8.0.0 \
     --timeout 600s \
     --set global.hosts.domain=k3d.gitlab.com \
     --set global.hosts.externalIP=0.0.0.0 \
@@ -42,10 +52,10 @@ GITLAB_PSW=$(kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o
 echo -e "${GREEN}GitLab root password: ${GITLAB_PSW}${RESET}"
 
 # Set up port forwarding for GitLab
-if sudo lsof -i :80 | grep -q 'kubectl'; then
-    echo -e "${GREEN}Port 80 is already being used, killing the process...${RESET}"
-    sudo pkill -f 'kubectl port-forward svc/gitlab-webservice-default'
+if [ -n "$(sudo lsof -i :80)" ]; then
+    echo "Port forwarding already running, recreating..."
+    sudo pkill -f "kubectl port-forward"
 fi
 
 echo -e "${GREEN}Setting up port forwarding for GitLab...${RESET}"
-sudo kubectl port-forward svc/gitlab-webservice-default -n gitlab 80:8181 2>&1 >/dev/null &
+kubectl port-forward svc/gitlab-webservice-default -n gitlab 80:8181 2>&1 >/dev/null &

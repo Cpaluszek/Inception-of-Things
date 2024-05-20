@@ -9,11 +9,15 @@ create_cluster() {
     if ! k3d cluster list | grep -q "${CLUSTER_NAME}"; then
         echo -e "${GREEN} Creating k3d cluster ${CLUSTER_NAME}...${RESET}"
         k3d cluster create ${CLUSTER_NAME}
-        echo -e "${GREEN} Creating k3d namespaces...${RESET}"
-        kubectl create namespace dev
-        kubectl create namespace argocd
-        kubectl get namespaces
     fi
+    echo -e "${GREEN} Creating k3d namespaces...${RESET}"
+    if ! kubectl get namespace dev > /dev/null 2>&1; then
+        kubectl create namespace dev
+    fi
+    if ! kubectl get namespace argocd > /dev/null 2>&1; then
+        kubectl create namespace argocd
+    fi
+    kubectl get namespaces
 }
 
 wait_for_argocd_pods() {

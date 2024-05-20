@@ -7,7 +7,7 @@ RED="\033[31m"
 RESET="\033[0m"
 
 sudo apt-get update -y
-sudo apt-get install -y apt-transport-https ca-certificates curl
+sudo apt-get install -y apt-transport-https ca-certificates curl net-tools
 
 # install docker
 install_docker() {
@@ -15,7 +15,7 @@ install_docker() {
         echo -e "${GREEN}Installing docker...${RESET}"
         # Add Docker's official GPG key:
         sudo apt-get update
-        sudo apt-get install ca-certificates curl net-tools -y
+        sudo apt-get install ca-certificates curl -y
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -27,14 +27,14 @@ install_docker() {
             sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
         sudo apt-get update
 
-        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     else
         echo -e "${GREEN}Docker is already installed${RESET}"
     fi
 
     if ! id -nG $USER | grep -qw docker; then
         echo -e "${GREEN}adding current user to docker group${RESET}"
-        # sudo usermod -aG docker $USER
+        sudo usermod -aG docker $USER
     fi
 }
 
