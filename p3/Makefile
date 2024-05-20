@@ -6,12 +6,10 @@ RESET=\033[0m
 all: install-dependencies setup-cluster
 
 install-dependencies:
-	@echo "$(GREEN)Installing dependencies...$(RESET)"
 	@bash install_dependencies.sh
 	@echo "$(GREEN)Dependencies installed successfully.$(RESET)"
 
 setup-cluster:
-	@echo "$(GREEN)Setting up k3d cluster...$(RESET)"
 	@bash setup_k3d_cluster.sh
 	@echo "$(GREEN)k3d cluster setup successfully.$(RESET)"
 
@@ -27,19 +25,17 @@ infos:
 	@argocd app get will
 
 curl:
-	@echo "$(GREEN)Making a curl request to http://localhost:8888/...$(RESET)"
-	@curl http://localhost:8888/
+	curl http://localhost:8888/
 
 forward:
-	@echo "$(GREEN)Forwarding port...$(RESET)"
 	@kubectl port-forward svc/will-app -n dev 8888:8888 &
-	@sudo netstat -tulpn | grep :8888
 	@echo "$(GREEN)Port forwarded successfully.$(RESET)"
 
 clean:
 	@echo "$(GREEN)Cleaning up...$(RESET)"
-	@if kubectl get namespace argocd; then kubectl delete --all -n argocd; fi
-	@if kubectl get namespace dev; then kubectl delete --all -n dev; fi
+	@if kubectl get namespace argocd; then kubectl delete all --all -n argocd; fi
+	@if kubectl get namespace dev; then kubectl delete all --all -n dev; fi
 	@kubectl delete namespaces dev --ignore-not-found
 	@kubectl delete namespaces argocd --ignore-not-found
+	@k3d cluster delete ci-cluster
 	@echo "$(GREEN)Clean up completed successfully.$(RESET)"
