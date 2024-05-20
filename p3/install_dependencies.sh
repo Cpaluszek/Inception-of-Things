@@ -7,7 +7,7 @@ RED="\033[31m"
 RESET="\033[0m"
 
 sudo apt-get update -y
-sudo apt-get install -y apt-transport-https ca-certificates curl
+sudo apt-get install -y apt-transport-https ca-certificates curl net-tools
 
 # install docker
 install_docker() {
@@ -15,7 +15,6 @@ install_docker() {
         echo -e "${GREEN}Installing docker...${RESET}"
         # Add Docker's official GPG key:
         sudo apt-get update
-        sudo apt-get install ca-certificates curl net-tools -y
         sudo install -m 0755 -d /etc/apt/keyrings
         sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
         sudo chmod a+r /etc/apt/keyrings/docker.asc
