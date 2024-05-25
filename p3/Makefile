@@ -38,4 +38,6 @@ clean:
 	@kubectl delete namespaces dev --ignore-not-found
 	@kubectl delete namespaces argocd --ignore-not-found
 	@k3d cluster delete ci-cluster
+	docker stop $(docker ps -q)
+	docker system prune -a --volumes -f
 	@echo "$(GREEN)Clean up completed successfully.$(RESET)"

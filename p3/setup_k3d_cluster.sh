@@ -10,10 +10,16 @@ create_cluster() {
     if ! k3d cluster list | grep -q "${CLUSTER_NAME}"; then
         echo -e "${GREEN} Creating k3d cluster ${CLUSTER_NAME}...${RESET}"
         k3d cluster create ${CLUSTER_NAME}
+        mkdir -p ~/.kube
+        sudo k3d kubeconfig get ${CLUSTER_NAME} > ~/.kube/config
     fi
     echo -e "${GREEN} Creating k3d namespaces...${RESET}"
-    kubectl create namespace dev
-    kubectl create namespace argocd
+    if ! kubectl get namespaces | grep -q "dev"; then
+        kubectl create namespace dev
+    fi
+    if ! kubectl get namespaces | grep -q "argocd"; then
+        kubectl create namespace argocd
+    fi
     kubectl get namespaces
 }
 
@@ -48,6 +54,11 @@ setup_argo() {
         echo "Port 8080 is already in use. Trying to kill the process..."
         sudo pkill -f 'kubectl port-forward svc/argocd-server'
     fi
+    if sudo lsof -i :8080 -sTCP:LISTEN -t | grep -q 'kubectl'; then
+        echo "Another port-forwarding process for argocd-server is already in progress. Killing it..."
+        sudo pkill -f 'kubectl.*port-forward.*8080'
+        sleep 2
+    fi
 
     echo -e "${GREEN} Exposing argocd API Server...${RESET}"
     kubectl port-forward svc/argocd-server -n argocd 8080:443 &>/dev/null &
@@ -60,7 +71,7 @@ setup_argo() {
     ARGO_PSW=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
     echo -e "${GREEN} argocd admin password: ${ARGO_PSW}${RESET}"
 
-    argocd login localhost:8080 --insecure --username admin --password "$ARGO_PSW"
+    argocd login localhost:8080 --username admin --password "$ARGO_PSW" --insecure
 }
 
 create_argocd_app() {
