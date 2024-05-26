@@ -49,7 +49,7 @@ install_kubectl() {
 install_k3d() {
     if ! command -v k3d &> /dev/null; then
         echo -e "${GREEN}Installing k3d...${RESET}"
-        curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+        wget -q -O - https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
     else
         echo -e "${GREEN}k3d is already installed.${RESET}"
     fi

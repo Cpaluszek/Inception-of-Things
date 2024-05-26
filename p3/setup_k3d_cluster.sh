@@ -11,6 +11,7 @@ create_cluster() {
         echo -e "${GREEN} Creating k3d cluster ${CLUSTER_NAME}...${RESET}"
         k3d cluster create ${CLUSTER_NAME}
         mkdir -p ~/.kube
+        k3d kubeconfig get ${CLUSTER_NAME} > ~/.kube/config
         sudo k3d kubeconfig get ${CLUSTER_NAME} > ~/.kube/config
     fi
     echo -e "${GREEN} Creating k3d namespaces...${RESET}"
