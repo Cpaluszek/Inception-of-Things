@@ -21,6 +21,9 @@ infos:
 	@argocd app get will
 
 curl:
+	sudo pkill -f 'kubectl.*port-forward.*8888'
+	kubectl port-forward svc/will-app -n dev 8888:8888 &
+	sleep 2
 	curl http://localhost:8888/
 
 forward:

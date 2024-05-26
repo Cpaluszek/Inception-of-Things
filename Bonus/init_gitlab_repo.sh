@@ -51,3 +51,5 @@ git commit -m "Initial commit with Kubernetes manifests"
 git push --set-upstream origin main
 
 echo -e "${GREEN}GitLab project initialized and pushed successfully.${RESET}"
+
+ argocd app set will --repo "http://gitlab-webservice-default.gitlab.svc:8181/$GITLAB_ROOT_USER/$GITLAB_REPO_NAME.git/"
