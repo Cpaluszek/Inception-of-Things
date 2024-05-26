@@ -3,11 +3,11 @@ RESET=\033[0m
 
 .PHONY: all infos forward curl clean
 
-all: 
+all:
 	@bash setup_gitlab.sh
 	@echo "$(GREEN)k3d cluster setup successfully.$(RESET)"
-	@bash init_gitlab_repo.sh
-	@echo "$(GREEN)Gitlab repo created successfully.$(RESET)"
+	# @bash init_gitlab_repo.sh
+	# @echo "$(GREEN)Gitlab repo created successfully.$(RESET)"
 
 infos:
 	@echo "$(GREEN)Fetching Kubernetes information...$(RESET)"

@@ -46,6 +46,8 @@ Two namespaces:
 
 The port-forwarding needs to be upadted once the app has been refreshed.
 - TODO: Maybe use ingress app to automate network access
+- TODO: personal access token can not be created from terminal
+- TODO: pushing requires credentials can we automate this?
 
 
 ## References

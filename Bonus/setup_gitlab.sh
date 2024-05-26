@@ -26,14 +26,14 @@ fi
 
 # Deploy GitLab using Helm
 echo -e "${GREEN}Deploying GitLab using Helm...${RESET}"
-sudo helm repo add gitlab https://charts.gitlab.io/
-sudo helm repo update
+helm repo add gitlab https://charts.gitlab.io/
+helm repo update
 
 # [GitLab Helm Charts](https://charts.gitlab.io/)
 # minikube runs a single-node Kubernetes cluster
-kubectl config view --raw > ~/.kube/config
+# sudo kubectl config view --raw > ~/.kube/config
 
-sudo helm upgrade --install gitlab gitlab/gitlab \
+helm upgrade --install gitlab gitlab/gitlab \
     -f https://gitlab.com/gitlab-org/charts/gitlab/raw/master/examples/values-minikube-minimum.yaml \
     -n gitlab \
     --set global.hosts.domain=k3d.gitlab.com \
@@ -43,7 +43,7 @@ sudo helm upgrade --install gitlab gitlab/gitlab \
 
 # Wait for GitLab to be ready
 echo -e "${GREEN}Waiting for GitLab to be ready...${RESET}"
-kubectl wait --for=condition=ready --timeout=1200s pod -l app=webservice -n gitlab
+kubectl wait --for=condition=ready --timeout=1500s pod -l app=webservice -n gitlab
 
 # Retrieve GitLab initial root password
 GITLAB_PSW=$(kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o jsonpath="{.data.password}" | base64 -d)
@@ -57,6 +57,4 @@ fi
 
 echo -e "${GREEN}Setting up port forwarding for GitLab...${RESET}"
 sudo kubectl port-forward svc/gitlab-webservice-default -n gitlab 80:8181 2>&1 >/dev/null &
-
-# TODO: argocd update repo
-# argocd app set will --repo https://gitlab.k3d.gitlab.com/root/will.git
+#localhost:80 - login=root
