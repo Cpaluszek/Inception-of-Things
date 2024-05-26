@@ -6,8 +6,8 @@ RESET=\033[0m
 all:
 	@bash setup_gitlab.sh
 	@echo "$(GREEN)k3d cluster setup successfully.$(RESET)"
-	# @bash init_gitlab_repo.sh
-	# @echo "$(GREEN)Gitlab repo created successfully.$(RESET)"
+	@echo "Go to localhost:80 and create personal access token$"
+	@echo "Then paste the personal access token in the script init_gitlab_repo and run the script"
 
 infos:
 	@echo "$(GREEN)Fetching Kubernetes information...$(RESET)"
